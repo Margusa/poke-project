@@ -1,0 +1,64 @@
+body {
+  background: #2a0241;
+  color: white;
+}
+
+.form-control:focus{
+    border-color: #ba98e6;
+    outline: none;
+    border-style: solid;
+    border-width: 2px;
+}
+
+h1 {
+  color: #a36bec;
+  font-weight: bold;
+}
+
+.card {
+  background: #2b183a;
+  border-radius: 12px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+button {
+  border-radius: 8px;
+}
+
+.modal-content {
+  background: #482569;
+  color: white;
+  border-radius: 12px;
+}
+
+button.btn.btn-sm.btn-info{
+    background-color: rgb(135, 60, 193);
+    border-color:rgb(135, 60, 193);
+    color: beige;
+}
+button.btn-sm.btn-info:hover{
+    background-color:#a36bec;
+}
+
+.btn btn-info mb-2{
+
+}
+
+h5{
+    color: #b6a0d2;
+}
+.btn-primary{
+    background-color: rgb(73, 4, 103);
+    color: #dcd0e7;
+    border-color: #110120;
+}
+
+.btn-primary:hover{
+    background-color: #a36bec;
+    border-color: #a36bec;
+    color: #dcd0e7;
+}
