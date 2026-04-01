@@ -13,11 +13,8 @@ async function fetchPokemon() {
   try {
     const response = await fetch(`${API_URL}?limit=20&offset=${offset}`);
     const data = await response.json();
-    console.log(data)
     renderPokemon(data.results);
   } catch (error) {
-    console.log(error)
-    showError("Error al cargar Pokémon");
   } finally {
     document.getElementById("loader").style.display = "none";
   }
@@ -25,14 +22,25 @@ async function fetchPokemon() {
 
 //create card
 function createPokemonCard(pokemon) {
+  const favorite = isFavorite(pokemon.url);
   return `
     <div class="col-md-3">
-      <div class="card p-2 mb-3">
-        <h5>${pokemon.name}</h5>
-        <button onclick="getPokemonDetail('${pokemon.url}')" class="btn btn-info">
-          Ver detalle
-        </button>
-      </div>
+     <div class="card p-2 mb-3">
+      <h5>${pokemon.name}</h5>
+
+      <button onclick="getPokemonDetail('${pokemon.url}')" class="btn btn-info mb-2">
+        Ver detalle
+      </button>
+        ${
+        favorite
+            ? `<button onclick="removeFavoriteByUrl('${pokemon.url}')" class="btn btn-danger">
+                ❌ Quitar
+              </button>`
+            : `<button onclick="addFavorite('${pokemon.url}')" class="btn btn-warning">
+              ❤️ Guardar
+              </button>`
+        }
+     </div>
     </div>
   `;
 }
@@ -71,79 +79,52 @@ async function getPokemonDetail(url) {
 
 //serch
 document.getElementById("search").addEventListener("input", async (e) => {
-  const value = e.target.value.toLowerCase();
+  const value = e.target.value.toLowerCase().trim();
 
-  if (!value) {
-    //fetchPokemon();
+  if (value.length < 3) {
+    fetchPokemon(); // 
     return;
   }
 
   try {
     const response = await fetch(`${API_URL}/${value}`);
+
+    if (!response.ok) throw new Error("No encontrado");
+
     const data = await response.json();
 
-    renderPokemon([{ name: data.name, url: `${API_URL}/${data.id}` }]);
-  } catch {
-    document.getElementById("pokemon-list").innerHTML = "<p>No encontrado</p>";
+    renderPokemon([
+      { name: data.name, url: `${API_URL}/${data.id}` }
+    ]);
+
+  } catch (error) {
+    document.getElementById("pokemon-list").innerHTML =
+      "<p>No encuentro ese Pokemon</p>";
   }
 });
-
-// pagination
-document.getElementById("next").addEventListener("click", () => {
-  offset += 20;
-  fetchPokemon();
-});
-
-document.getElementById("prev").addEventListener("click", () => {
-  if (offset >= 20) {
-    offset -= 20;
-    fetchPokemon();
-  }
-});
-
-//errors 
-function showError(message) {
-  document.getElementById("pokemon-list").innerHTML = `
-    <div class="alert alert-danger">${message}</div>
-    `;
-}
 
 //LocalStorage
 function getFavorites() {
-  return JSON.parse(localStorage.getItem("favorites")) || [];
+  try {
+    const data = localStorage.getItem("favorites");
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.log("Error leyendo favoritos:", error);
+    return [];
+  }
 }
 
 function saveFavorites(favorites) {
   localStorage.setItem("favorites", JSON.stringify(favorites));
 }
-// buttons
-function createPokemonCard(pokemon) {
-  return `
-    <div class="col-md-3">
-      <div class="card p-2 mb-3">
-        <h5>${pokemon.name}</h5>
 
-        <button onclick="getPokemonDetail('${pokemon.url}')" class="btn btn-info mb-2">
-          Ver detalle
-        </button>
-
-        <button onclick="addFavorite('${pokemon.url}')" class="btn btn-warning">
-          ❤️ Guardar
-        </button>
-      </div>
-    </div>
-  `;
-}
-
-//save imagen
+//add favorites
 async function addFavorite(url) {
   const response = await fetch(url);
   const data = await response.json();
-
   const favorites = getFavorites();
 
-  const exists = favorites.find(p => p.id === data.id);
-  if (exists) return;
+  if (favorites.find(p => p.id === data.id)) return;
 
   const pokemon = {
     id: data.id,
@@ -155,7 +136,8 @@ async function addFavorite(url) {
   saveFavorites(favorites);
 
   renderFavorites();
-}
+  fetchPokemon();
+ };
 
 //favorites imagen
 function renderFavorites() {
@@ -169,5 +151,34 @@ function renderFavorites() {
     </div>
   `).join("");
 }
+// // // removeFavorites
+window.removeFavoriteByUrl = async function(url) {
+  const response = await fetch(url);
+  const data = await response.json();
+
+  removeFavorite(data.id);
+};
+
+// //validate favorites
+function isFavorite(url) {
+  const favorites = getFavorites();
+  return favorites.some(p => url.includes(`/pokemon/${p.id}`));
+}
+
+function removeFavorite(id) {
+  let favorites = getFavorites();
+
+  favorites = favorites.filter(p => p.id !== id);
+
+  saveFavorites(favorites);
+
+  renderFavorites();
+  fetchPokemon(); 
+}
 
 fetchPokemon()
+
+window.addFavorite = addFavorite;
+window.removeFavoriteByUrl = removeFavoriteByUrl;
+window.getPokemonDetail = getPokemonDetail;
+

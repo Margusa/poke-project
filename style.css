@@ -62,3 +62,11 @@ h5{
     border-color: #a36bec;
     color: #dcd0e7;
 }
+
+button {
+  transition: all 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.95);
+}
