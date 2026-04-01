@@ -1,5 +1,5 @@
 # Poke-project
-# Pokedex App | Challenge
+Pokedex App | Challenge
 
 ## Pokedex App
 
