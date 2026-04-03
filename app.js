@@ -22,25 +22,34 @@ async function fetchPokemon() {
 
 //create card
 function createPokemonCard(pokemon) {
+  const id = pokemon.url.split("/").filter(Boolean).pop();
+
+  const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+
   const favorite = isFavorite(pokemon.url);
+
   return `
     <div class="col-md-3">
-     <div class="card p-2 mb-3">
-      <h5>${pokemon.name}</h5>
+      <div class="card p-2 mb-3">
+        
+        <div class="d-flex align-items-center justify-content-between">
+          <h5 class="mb-0">${pokemon.name}</h5>
+          <img src="${image}" width="50" />
+        </div>
 
-      <button onclick="getPokemonDetail('${pokemon.url}')" class="btn btn-info mb-2">
-        Ver detalle
-      </button>
-        ${
-        favorite
-            ? `<button onclick="removeFavoriteByUrl('${pokemon.url}')" class="btn btn-danger">
+        <button onclick="getPokemonDetail('${pokemon.url}')" class="btn btn-info mb-2 mt-2">
+          Ver detalle
+        </button>
+
+        ${favorite
+      ? `<button onclick="removeFavoriteByUrl('${pokemon.url}')" class="btn btn-danger">
                 ❌ Quitar
               </button>`
-            : `<button onclick="addFavorite('${pokemon.url}')" class="btn btn-warning">
-              ❤️ Guardar
+      : `<button onclick="addFavorite('${pokemon.url}')" class="btn btn-warning">
+                ❤️ Guardar
               </button>`
-        }
-     </div>
+    }
+      </div>
     </div>
   `;
 }
@@ -49,6 +58,7 @@ function createPokemonCard(pokemon) {
 function renderPokemon(pokemons) {
   const container = document.getElementById("pokemon-list");
   container.innerHTML = pokemons.map(createPokemonCard).join("");
+  data.results
 }
 
 // details pokemon
@@ -137,7 +147,7 @@ async function addFavorite(url) {
 
   renderFavorites();
   fetchPokemon();
- };
+};
 
 //favorites imagen
 function renderFavorites() {
@@ -152,7 +162,7 @@ function renderFavorites() {
   `).join("");
 }
 // // // removeFavorites
-window.removeFavoriteByUrl = async function(url) {
+window.removeFavoriteByUrl = async function (url) {
   const response = await fetch(url);
   const data = await response.json();
 
@@ -173,7 +183,7 @@ function removeFavorite(id) {
   saveFavorites(favorites);
 
   renderFavorites();
-  fetchPokemon(); 
+  fetchPokemon();
 }
 
 fetchPokemon()
@@ -181,4 +191,3 @@ fetchPokemon()
 window.addFavorite = addFavorite;
 window.removeFavoriteByUrl = removeFavoriteByUrl;
 window.getPokemonDetail = getPokemonDetail;
-

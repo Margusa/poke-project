@@ -1,45 +1,46 @@
-
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Pokedex</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="container mt-4">
-  <h1 class="text-center">Pokédex</h1>
+  <div class="container mt-4">
+    <h1 class="text-center">Pokédex</h1>
 
-  <!-- serch -->
-  <input type="text" id="search" class="form-control mb-3" placeholder="Buscar Pokémon...">
-  <!-- serch -->
-  <div id="loader" class="text-center">
-    <p>loading...</p>
-  </div>
-   <!-- favorites -->
-  <h3>⭐ Favoritos</h3>
-  <div id="favorites" class="row mb-4"></div>
+    <!-- serch -->
+    <input type="text" id="search" class="form-control mb-3" placeholder="Buscar Pokémon...">
+    <!-- serch -->
+    <div id="loader" class="text-center">
+      <p>loading...</p>
+    </div>
+    <!-- favorites -->
+    <h3>⭐ Favoritos</h3>
+    <div id="favorites" class="row mb-4"></div>
 
-  <!-- list -->
-  <div id="pokemon-list" class="row"></div>
+    <!-- list -->
+    <div id="pokemon-list" class="row"></div>
 
-  <!-- Buttons -->
-  <div class="d-flex justify-content-between mt-3">
-    <button id="prev" class="btn btn-primary">Anterior</button>
-    <button id="next" class="btn btn-primary">Siguiente</button>
-  </div>
-</div>
+    <!-- Buttons -->
+    <div class="d-flex justify-content-between mt-3">
+      <button id="prev" class="btn btn-primary">Anterior</button>
+      <button id="next" class="btn btn-primary">Siguiente</button>
+    </div>
 
-<!-- Modal Details-->
-<div class="modal fade" id="pokemonModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content p-3" id="pokemon-detail"></div>
-  </div>
-</div>
+    <!-- Modal Details-->
+    <div class="modal fade" id="pokemonModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content p-3" id="pokemon-detail"></div>
+      </div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
 </body>
+
 </html>
