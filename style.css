@@ -11,12 +11,12 @@ body {
 }
 
 h1 {
-  color: #a36bec;
+  color: #ddcbf4;
   font-weight: bold;
 }
 
 .card {
-  background: #2b183a;
+  background: #533a65;
   border-radius: 12px;
   transition: transform 0.2s;
 }
@@ -38,7 +38,7 @@ button {
 .btn-info.mb-2 {
   background-color: rgb(135, 60, 193);
   border-color: rgb(135, 60, 193);
-  color: beige;
+  color: rgb(247, 247, 233);
 }
 
 .btn-info.mb-2:hover {
@@ -58,7 +58,7 @@ button {
 
 
 h5 {
-  color: #b6a0d2;
+  color: #e3d3f8;
 }
 
 .btn-primary {
@@ -79,4 +79,13 @@ button {
 
 button:active {
   transform: scale(0.95);
+}
+
+#favorites button {
+  opacity: 0;
+  transition: 0.3s;
+}
+
+#favorites .position-relative:hover button {
+  opacity: 1;
 }

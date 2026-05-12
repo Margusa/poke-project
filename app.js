@@ -54,6 +54,34 @@ function createPokemonCard(pokemon) {
   `;
 }
 
+// button next 
+document.getElementById("next").addEventListener("click", () => {
+  const searchValue = document.getElementById("search").value.trim();
+
+  if (searchValue) return;
+
+  offset += 20;
+
+  console.log("NEXT OFFSET:", offset);
+
+  fetchPokemon();
+});
+
+// button prev
+document.getElementById("prev").addEventListener("click", () => {
+  const searchValue = document.getElementById("search").value.trim();
+
+  if (searchValue) return;
+
+  if (offset >= 20) {
+    offset -= 20;
+  }
+
+  console.log("PREV OFFSET:", offset);
+
+  fetchPokemon();
+});
+
 // show list
 function renderPokemon(pokemons) {
   const container = document.getElementById("pokemon-list");
@@ -155,12 +183,26 @@ function renderFavorites() {
   const favorites = getFavorites();
 
   container.innerHTML = favorites.map(pokemon => `
-    <div class="col-md-2 text-center">
+    <div class="col-md-2 text-center position-relative mb-3">
+
+      <button 
+        onclick="removeFavorite(${pokemon.id})"
+        class="btn btn-sm btn-danger position-absolute top-0 end-0"
+        style="font-size:10px; padding:2px 6px;"
+      >
+        ❌
+      </button>
+
       <img src="${pokemon.image}" width="80" />
-      <p>${pokemon.name}</p>
+
+      <p class="mt-2 text-capitalize">
+        ${pokemon.name}
+      </p>
+
     </div>
   `).join("");
 }
+
 // // // removeFavorites
 window.removeFavoriteByUrl = async function (url) {
   const response = await fetch(url);
@@ -189,5 +231,5 @@ function removeFavorite(id) {
 fetchPokemon()
 
 window.addFavorite = addFavorite;
-window.removeFavoriteByUrl = removeFavoriteByUrl;
+window.removeFavorite = removeFavorite;
 window.getPokemonDetail = getPokemonDetail;
