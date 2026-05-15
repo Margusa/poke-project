@@ -62,8 +62,6 @@ document.getElementById("next").addEventListener("click", () => {
 
   offset += 20;
 
-  console.log("NEXT OFFSET:", offset);
-
   fetchPokemon();
 });
 
@@ -76,8 +74,6 @@ document.getElementById("prev").addEventListener("click", () => {
   if (offset >= 20) {
     offset -= 20;
   }
-
-  console.log("PREV OFFSET:", offset);
 
   fetchPokemon();
 });
