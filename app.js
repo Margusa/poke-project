@@ -1,5 +1,7 @@
-const API_URL = "https://pokeapi.co/api/v2/pokemon";
+const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=1000";
 let offset = 0;
+let allPokemons = [];
+let currentPokemons = [];
 
 const typeColors = {
   fire: "red",
@@ -8,13 +10,23 @@ const typeColors = {
   electric: "yellow"
 };
 async function fetchPokemon() {
+
   document.getElementById("loader").style.display = "block";
 
   try {
-    const response = await fetch(`${API_URL}?limit=20&offset=${offset}`);
+
+    const response = await fetch(`${API_URL}?limit=1000`);
     const data = await response.json();
-    renderPokemon(data.results);
+
+    allPokemons = data.results;
+    currentPokemons = allPokemons.slice(offset, offset + 20);
+    renderPokemon(currentPokemons);
+
   } catch (error) {
+    console.log(error);
+
+    showError("Error al cargar Pokémon");
+
   } finally {
     document.getElementById("loader").style.display = "none";
   }
@@ -59,10 +71,9 @@ document.getElementById("next").addEventListener("click", () => {
   const searchValue = document.getElementById("search").value.trim();
 
   if (searchValue) return;
-
   offset += 20;
-
-  fetchPokemon();
+  currentPokemons = allPokemons.slice(offset, offset + 20);
+  renderPokemon(currentPokemons);
 });
 
 // button prev
@@ -70,12 +81,12 @@ document.getElementById("prev").addEventListener("click", () => {
   const searchValue = document.getElementById("search").value.trim();
 
   if (searchValue) return;
-
   if (offset >= 20) {
     offset -= 20;
   }
 
-  fetchPokemon();
+  currentPokemons = allPokemons.slice(offset, offset + 20);
+  renderPokemon(currentPokemons);
 });
 
 // show list
@@ -111,30 +122,27 @@ async function getPokemonDetail(url) {
   modal.show();
 }
 
-//serch
-document.getElementById("search").addEventListener("input", async (e) => {
+//serch bar
+document.getElementById("search").addEventListener("input", (e) => {
+
   const value = e.target.value.toLowerCase().trim();
 
-  if (value.length < 3) {
-    fetchPokemon(); // 
+  if (!value) {
+    currentPokemons = allPokemons.slice(offset, offset + 20);
+    renderPokemon(currentPokemons);
     return;
   }
 
-  try {
-    const response = await fetch(`${API_URL}/${value}`);
+  const filtered = allPokemons.filter(pokemon =>
+    pokemon.name.toLowerCase().includes(value)
+  );
 
-    if (!response.ok) throw new Error("No encontrado");
-
-    const data = await response.json();
-
-    renderPokemon([
-      { name: data.name, url: `${API_URL}/${data.id}` }
-    ]);
-
-  } catch (error) {
+  if (!filtered.length) {
     document.getElementById("pokemon-list").innerHTML =
-      "<p>No encuentro ese Pokemon</p>";
+      "<p>No encontrado</p>";
+    return;
   }
+  renderPokemon(filtered);
 });
 
 //LocalStorage
