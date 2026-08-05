@@ -89,3 +89,15 @@ button:active {
 #favorites .position-relative:hover button {
   opacity: 1;
 }
+
+button:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+    
+}
+.btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+    background-color: rgb(135, 60, 193);
+    border-color: rgb(135, 60, 193);
+}

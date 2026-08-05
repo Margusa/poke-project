@@ -21,6 +21,8 @@ async function fetchPokemon() {
     allPokemons = data.results;
     currentPokemons = allPokemons.slice(offset, offset + 20);
     renderPokemon(currentPokemons);
+    updatePaginationButtons();
+    renderFavorites();
 
   } catch (error) {
     console.log(error);
@@ -32,13 +34,26 @@ async function fetchPokemon() {
   }
 }
 
+
+//Disable "Next" buttons
+function updatePaginationButtons() {
+  const prevButton = document.getElementById("prev");
+  const nextButton = document.getElementById("next");
+
+  // Primera página
+  prevButton.disabled = offset === 0;
+
+  // Última página
+  nextButton.disabled = offset + 20 >= allPokemons.length;
+}
+
 //create card
 function createPokemonCard(pokemon) {
   const id = pokemon.url.split("/").filter(Boolean).pop();
 
   const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
-  const favorite = isFavorite(pokemon.url);
+  const favorite = isFavorite(id);
 
   return `
     <div class="col-md-3">
@@ -53,7 +68,7 @@ function createPokemonCard(pokemon) {
           Ver detalle
         </button>
 
-        ${favorite
+        ${favorite 
       ? `<button onclick="removeFavoriteByUrl('${pokemon.url}')" class="btn btn-danger">
                 ❌ Quitar
               </button>`
@@ -74,6 +89,7 @@ document.getElementById("next").addEventListener("click", () => {
   offset += 20;
   currentPokemons = allPokemons.slice(offset, offset + 20);
   renderPokemon(currentPokemons);
+  updatePaginationButtons();
 });
 
 // button prev
@@ -87,13 +103,14 @@ document.getElementById("prev").addEventListener("click", () => {
 
   currentPokemons = allPokemons.slice(offset, offset + 20);
   renderPokemon(currentPokemons);
+  updatePaginationButtons();
 });
 
 // show list
 function renderPokemon(pokemons) {
   const container = document.getElementById("pokemon-list");
   container.innerHTML = pokemons.map(createPokemonCard).join("");
-  data.results
+  // data.results
 }
 
 // details pokemon
@@ -130,6 +147,7 @@ document.getElementById("search").addEventListener("input", (e) => {
   if (!value) {
     currentPokemons = allPokemons.slice(offset, offset + 20);
     renderPokemon(currentPokemons);
+    updatePaginationButtons();
     return;
   }
 
@@ -178,7 +196,8 @@ async function addFavorite(url) {
   saveFavorites(favorites);
 
   renderFavorites();
-  fetchPokemon();
+  currentPokemons = allPokemons.slice(offset, offset + 20);
+  renderPokemon(currentPokemons);
 };
 
 //favorites imagen
@@ -216,9 +235,10 @@ window.removeFavoriteByUrl = async function (url) {
 };
 
 // //validate favorites
-function isFavorite(url) {
+function isFavorite(id) {
   const favorites = getFavorites();
-  return favorites.some(p => url.includes(`/pokemon/${p.id}`));
+  console.log(id)
+  return favorites.some(p => id == p.id);
 }
 
 function removeFavorite(id) {
