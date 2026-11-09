@@ -101,3 +101,9 @@ button:disabled {
     background-color: rgb(135, 60, 193);
     border-color: rgb(135, 60, 193);
 }
+
+#pokemon-list .alert{
+  margin-top: 20px;
+  padding: 25px;
+  border-radius: 12px;
+}

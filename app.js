@@ -1,4 +1,5 @@
-const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=1000";
+const API_URL = "https://pokeapi.co/api/v2/pokemon";
+//const API_URL = "http://localhost:4000/api/v2/pokemon";
 let offset = 0;
 let allPokemons = [];
 let currentPokemons = [];
@@ -248,8 +249,26 @@ function removeFavorite(id) {
 
   saveFavorites(favorites);
 
+  
   renderFavorites();
   fetchPokemon();
+}
+
+function showError(message){
+  const container = document.getElementById("pokemon-list");
+
+  container.innerHTML =`
+  <div class="alert alert-danger text-center" role="alert">
+    <strong>¡UUUPS!</strong>
+    <p>${message}</p>
+    <button
+    class="btn btn-outline-danger"
+    oneClick="fetchPokemon()">
+      Intenta nuevamente
+    </button>
+  </div>
+  `;
+  
 }
 
 fetchPokemon()
